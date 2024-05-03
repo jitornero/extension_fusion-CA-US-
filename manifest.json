@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "QA HTML",
-    "version": "1.0",
-    "description": "HTML",
+    "name": "QA HTML - Ford O&S",
+    "version": "3.0",
+    "description": "Plugin Options&Specs para Ford US/CA",
     "action": {
         "default_title": "html",
          "default_icon": "icon.png",
