@@ -9,32 +9,32 @@
 
     function ejecutar() {
       let specsContainer = document.querySelector('.fgx-brand-accordion-item:nth-child(2)');
-let title = document.title;
-const articles = specsContainer.querySelectorAll('article');
-const combinedData = [];
+      let title = document.title;
+      const articles = specsContainer.querySelectorAll('article');
+      const combinedData = [];
 
-articles.forEach((article) => {
-  // Get the h3 tag within each article
-  const articleH3 = article.querySelector('h3');
-  if (articleH3) {
-    // Push the h3 content to combinedData
-    combinedData.push([articleH3.textContent.trim()]);
-  }
-  // Get the table within each article
-  const articleTable = article.querySelector('table');
-  if (articleTable) {
-    // Push the table content to combinedData
-    articleTable.querySelectorAll('tr').forEach((row) => {
-      const rowData = [];
-      row.querySelectorAll('td, th').forEach((cell) => {
-        rowData.push(cell.textContent.trim());
+      articles.forEach((article) => {
+        // Get the h3 tag within each article
+        const articleH3 = article.querySelector('h3');
+        if (articleH3) {
+          // Push the h3 content to combinedData
+          combinedData.push([articleH3.textContent.trim()]);
+        }
+        // Get the table within each article
+        const articleTable = article.querySelector('table');
+        if (articleTable) {
+          // Push the table content to combinedData
+          articleTable.querySelectorAll('tr').forEach((row) => {
+            const rowData = [];
+            row.querySelectorAll('td, th').forEach((cell) => {
+              rowData.push(cell.textContent.trim());
+            });
+            combinedData.push(rowData);
+          });
+        }
       });
-      combinedData.push(rowData);
-    });
-  }
-});
 
-console.log(combinedData);
+      console.log(combinedData);
 
       // const csvLinesMetric = convertToCSV(combinedDataMetric);
       // const csvLinesImperial = convertToCSV(combinedDataImperial);
