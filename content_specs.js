@@ -9,76 +9,69 @@
 
     function ejecutar() {
       let specsContainer = document.querySelector('.fgx-brand-accordion-item:nth-child(2)');
+let title = document.title;
+const articles = specsContainer.querySelectorAll('article');
+const combinedData = [];
 
-      let title = document.title;
-
-      const tables = specsContainer.querySelectorAll('table');
-   
-      const combinedDataMetric = [];
-      const combinedDataImperial = [];
-
-      tables.forEach((table) => {
-        // Get the unit type (metric or imperial) from the table's data-fd-spec-unit attribute
-        const unitType = table.getAttribute('data-fd-spec-unit');
-
-        // Initialize an empty array for each table
-        let combinedData = null;
-
-        if (unitType === 'metric') {
-          combinedData = combinedDataMetric;
-        } else if (unitType === 'imperial') {
-          combinedData = combinedDataImperial;
-        }
-
-        combinedData.push(['--------------------------------------------------------------------------------------------------']);
-
-        table.querySelectorAll('tr').forEach((row, rowIndex) => {
-          const rowData = [];
-
-          row.querySelectorAll('td, th').forEach((cell, cellIndex) => {
-            rowData.push(cell.textContent.trim());
-          });
-
-          combinedData.push(rowData);
-        });
+articles.forEach((article) => {
+  // Get the h3 tag within each article
+  const articleH3 = article.querySelector('h3');
+  if (articleH3) {
+    // Push the h3 content to combinedData
+    combinedData.push([articleH3.textContent.trim()]);
+  }
+  // Get the table within each article
+  const articleTable = article.querySelector('table');
+  if (articleTable) {
+    // Push the table content to combinedData
+    articleTable.querySelectorAll('tr').forEach((row) => {
+      const rowData = [];
+      row.querySelectorAll('td, th').forEach((cell) => {
+        rowData.push(cell.textContent.trim());
       });
+      combinedData.push(rowData);
+    });
+  }
+});
 
-      const csvLinesMetric = convertToCSV(combinedDataMetric);
-      const csvLinesImperial = convertToCSV(combinedDataImperial);
+console.log(combinedData);
 
-      const csvContentMetric = "\uFEFF" + csvLinesMetric.join('\r\n');
-      const csvContentImperial = "\uFEFF" + csvLinesImperial.join('\r\n');
+      // const csvLinesMetric = convertToCSV(combinedDataMetric);
+      // const csvLinesImperial = convertToCSV(combinedDataImperial);
 
-      const csvBlobMetric = new Blob([csvContentMetric], { type: 'text/csv;charset=utf-8;' });
-      const csvUrlMetric = URL.createObjectURL(csvBlobMetric);
+      // const csvContentMetric = "\uFEFF" + csvLinesMetric.join('\r\n');
+      // const csvContentImperial = "\uFEFF" + csvLinesImperial.join('\r\n');
 
-      const csvBlobImperial = new Blob([csvContentImperial], { type: 'text/csv;charset=utf-8;' });
-      const csvUrlImperial = URL.createObjectURL(csvBlobImperial);
+      // const csvBlobMetric = new Blob([csvContentMetric], { type: 'text/csv;charset=utf-8;' });
+      // const csvUrlMetric = URL.createObjectURL(csvBlobMetric);
 
-      createDownloadLink(csvUrlMetric, `SPECS - Metric Units - ${title}.csv`);
-      createDownloadLink(csvUrlImperial, `SPECS - Imperial Units - ${title}.csv`);
+      // const csvBlobImperial = new Blob([csvContentImperial], { type: 'text/csv;charset=utf-8;' });
+      // const csvUrlImperial = URL.createObjectURL(csvBlobImperial);
+
+      // createDownloadLink(csvUrlMetric, `SPECS - Metric Units - ${title}.csv`);
+      // createDownloadLink(csvUrlImperial, `SPECS - Imperial Units - ${title}.csv`);
     }
 
     // Function to convert combined data to CSV format
-    function convertToCSV(combinedData) {
-      return combinedData.map(rowData => {
-        const escapedRowArray = rowData.map(value => {
-          return '"' + value.replace(/"/g, '""') + '"';
-        });
-        return escapedRowArray.join(';');
-      });
-    }
+    // function convertToCSV(combinedData) {
+    //   return combinedData.map(rowData => {
+    //     const escapedRowArray = rowData.map(value => {
+    //       return '"' + value.replace(/"/g, '""') + '"';
+    //     });
+    //     return escapedRowArray.join(';');
+    //   });
+    // }
 
-    // Function to create and trigger download links
-    function createDownloadLink(csvUrl, fileName) {
-      const downloadLink = document.createElement('a');
-      downloadLink.href = csvUrl;
-      downloadLink.download = fileName;
-      downloadLink.style.display = 'none';
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    }
+    // // Function to create and trigger download links
+    // function createDownloadLink(csvUrl, fileName) {
+    //   const downloadLink = document.createElement('a');
+    //   downloadLink.href = csvUrl;
+    //   downloadLink.download = fileName;
+    //   downloadLink.style.display = 'none';
+    //   document.body.appendChild(downloadLink);
+    //   downloadLink.click();
+    //   document.body.removeChild(downloadLink);
+    // }
 
     // Call the function
     ejecutar();
