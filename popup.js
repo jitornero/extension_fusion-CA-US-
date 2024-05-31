@@ -22,4 +22,4 @@ document.getElementById('specs').addEventListener('click', function() {
   chrome.runtime.sendMessage(greeting);
 });
 
-console.log('hello chayyane')
+console.log('hello ')
