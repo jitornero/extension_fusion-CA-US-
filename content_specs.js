@@ -11,30 +11,59 @@
       let specsContainer = document.querySelector('.fgx-brand-accordion-item:nth-child(2)');
       let title = document.title;
       const articles = specsContainer.querySelectorAll('article');
-      const combinedData = [];
+      const combinedDataImperial = [];
+      const combinedDataMetric = [];
+
 
       articles.forEach((article) => {
-        // Get the h3 tag within each article
         const articleH3 = article.querySelector('h3');
+
         if (articleH3) {
-          // Push the h3 content to combinedData
-          combinedData.push([articleH3.textContent.trim()]);
+          combinedDataImperial.push([articleH3.textContent.trim()]);
+          combinedDataMetric.push([articleH3.textContent.trim()])
         }
-        // Get the table within each article
-        const articleTable = article.querySelector('table');
-        if (articleTable) {
-          // Push the table content to combinedData
-          articleTable.querySelectorAll('tr').forEach((row) => {
-            const rowData = [];
-            row.querySelectorAll('td, th').forEach((cell) => {
-              rowData.push(cell.textContent.trim());
+
+        const articleTable = article.querySelectorAll('table');
+
+        console.log('tables', articleTable);
+
+
+
+        articleTable.forEach((table)=>{
+          const unitType = table.getAttribute('data-fd-spec-unit');
+          console.log(table)
+
+          if (unitType === 'metric') {
+            table.querySelectorAll('tr').forEach((row) => {
+              const rowDataMetric = [];
+              row.querySelectorAll('td, th').forEach((cell) => {
+                rowDataMetric.push(cell.textContent.trim());
+              });
+              combinedDataMetric.push(rowDataMetric);
             });
-            combinedData.push(rowData);
-          });
-        }
+
+
+
+          } else if (unitType === 'imperial') {
+            table.querySelectorAll('tr').forEach((row) => {
+              const rowData = [];
+              row.querySelectorAll('td, th').forEach((cell) => {
+                rowData.push(cell.textContent.trim());
+              });
+              combinedDataImperial.push(rowData);
+            });
+          }
+
+        
+        
+        })
+
+
       });
 
-      console.log(combinedData);
+      console.log('imperial', combinedDataImperial);
+      console.log('metric', combinedDataMetric);
+
 
       // const csvLinesMetric = convertToCSV(combinedDataMetric);
       // const csvLinesImperial = convertToCSV(combinedDataImperial);
