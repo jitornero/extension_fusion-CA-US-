@@ -65,42 +65,42 @@
       console.log('metric', combinedDataMetric);
 
 
-      // const csvLinesMetric = convertToCSV(combinedDataMetric);
-      // const csvLinesImperial = convertToCSV(combinedDataImperial);
+      const csvLinesMetric = convertToCSV(combinedDataMetric);
+      const csvLinesImperial = convertToCSV(combinedDataImperial);
 
-      // const csvContentMetric = "\uFEFF" + csvLinesMetric.join('\r\n');
-      // const csvContentImperial = "\uFEFF" + csvLinesImperial.join('\r\n');
+      const csvContentMetric = "\uFEFF" + csvLinesMetric.join('\r\n');
+      const csvContentImperial = "\uFEFF" + csvLinesImperial.join('\r\n');
 
-      // const csvBlobMetric = new Blob([csvContentMetric], { type: 'text/csv;charset=utf-8;' });
-      // const csvUrlMetric = URL.createObjectURL(csvBlobMetric);
+      const csvBlobMetric = new Blob([csvContentMetric], { type: 'text/csv;charset=utf-8;' });
+      const csvUrlMetric = URL.createObjectURL(csvBlobMetric);
 
-      // const csvBlobImperial = new Blob([csvContentImperial], { type: 'text/csv;charset=utf-8;' });
-      // const csvUrlImperial = URL.createObjectURL(csvBlobImperial);
+      const csvBlobImperial = new Blob([csvContentImperial], { type: 'text/csv;charset=utf-8;' });
+      const csvUrlImperial = URL.createObjectURL(csvBlobImperial);
 
-      // createDownloadLink(csvUrlMetric, `SPECS - Metric Units - ${title}.csv`);
-      // createDownloadLink(csvUrlImperial, `SPECS - Imperial Units - ${title}.csv`);
+      createDownloadLink(csvUrlMetric, `SPECS - Metric Units - ${title}.csv`);
+      createDownloadLink(csvUrlImperial, `SPECS - Imperial Units - ${title}.csv`);
     }
 
-    // Function to convert combined data to CSV format
-    // function convertToCSV(combinedData) {
-    //   return combinedData.map(rowData => {
-    //     const escapedRowArray = rowData.map(value => {
-    //       return '"' + value.replace(/"/g, '""') + '"';
-    //     });
-    //     return escapedRowArray.join(';');
-    //   });
-    // }
+    //Function to convert combined data to CSV format
+    function convertToCSV(combinedData) {
+      return combinedData.map(rowData => {
+        const escapedRowArray = rowData.map(value => {
+          return '"' + value.replace(/"/g, '""') + '"';
+        });
+        return escapedRowArray.join(';');
+      });
+    }
 
-    // // Function to create and trigger download links
-    // function createDownloadLink(csvUrl, fileName) {
-    //   const downloadLink = document.createElement('a');
-    //   downloadLink.href = csvUrl;
-    //   downloadLink.download = fileName;
-    //   downloadLink.style.display = 'none';
-    //   document.body.appendChild(downloadLink);
-    //   downloadLink.click();
-    //   document.body.removeChild(downloadLink);
-    // }
+    // Function to create and trigger download links
+    function createDownloadLink(csvUrl, fileName) {
+      const downloadLink = document.createElement('a');
+      downloadLink.href = csvUrl;
+      downloadLink.download = fileName;
+      downloadLink.style.display = 'none';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
 
     // Call the function
     ejecutar();
