@@ -1,9 +1,6 @@
-
 (function () {
   const htmlLang = document.querySelector("html");
   const country = htmlLang.getAttribute('lang');
-
-
 
   if (country == "en-CA") {
 
@@ -14,56 +11,44 @@
       const combinedDataImperial = [];
       const combinedDataMetric = [];
 
-
       articles.forEach((article) => {
         const articleH3 = article.querySelector('h3');
 
         if (articleH3) {
-          combinedDataImperial.push([articleH3.textContent.trim()]);
-          combinedDataMetric.push([articleH3.textContent.trim()])
+          combinedDataImperial.push([articleH3.textContent.trim(), '--------------------------------------------------------------------------------------------------']);
+          combinedDataMetric.push([articleH3.textContent.trim(), '--------------------------------------------------------------------------------------------------'])
         }
 
         const articleTable = article.querySelectorAll('table');
 
         console.log('tables', articleTable);
 
-
-
-        articleTable.forEach((table)=>{
+        articleTable.forEach((table) => {
           const unitType = table.getAttribute('data-fd-spec-unit');
-          console.log(table)
+          console.log(table);
 
           if (unitType === 'metric') {
             table.querySelectorAll('tr').forEach((row) => {
               const rowDataMetric = [];
               row.querySelectorAll('td, th').forEach((cell) => {
-                rowDataMetric.push(cell.textContent.trim());
+                rowDataMetric.push(formatCellValue(cell.textContent.trim()));
               });
               combinedDataMetric.push(rowDataMetric);
             });
-
-
-
           } else if (unitType === 'imperial') {
             table.querySelectorAll('tr').forEach((row) => {
               const rowData = [];
               row.querySelectorAll('td, th').forEach((cell) => {
-                rowData.push(cell.textContent.trim());
+                rowData.push(formatCellValue(cell.textContent.trim()));
               });
               combinedDataImperial.push(rowData);
             });
           }
-
-        
-        
-        })
-
-
+        });
       });
 
       console.log('imperial', combinedDataImperial);
       console.log('metric', combinedDataMetric);
-
 
       const csvLinesMetric = convertToCSV(combinedDataMetric);
       const csvLinesImperial = convertToCSV(combinedDataImperial);
@@ -81,7 +66,7 @@
       createDownloadLink(csvUrlImperial, `SPECS - Imperial Units - ${title}.csv`);
     }
 
-    //Function to convert combined data to CSV format
+    // Function to convert combined data to CSV format
     function convertToCSV(combinedData) {
       return combinedData.map(rowData => {
         const escapedRowArray = rowData.map(value => {
@@ -102,67 +87,81 @@
       document.body.removeChild(downloadLink);
     }
 
+    // Function to format cell values as text if necessary
+    function formatCellValue(value) {
+      if (!isNaN(value.replace(',', '')) && value.includes(',')) {
+        return `="${value}"`;
+      }
+      return value;
+    }
+
     // Call the function
     ejecutar();
 
-  }
-
-  else {
+  } else {
     function ejecutar() {
       let specsContainer = document.querySelector('.fgx-brand-accordion-item:nth-child(2)');
-
       let title = document.title;
-
       const elements = specsContainer.querySelectorAll('h3, table');
-
       const combinedData = [];
-
-      let currentH3 = null; // Variable to store the current h3 tag
+      let currentH3 = null;
 
       elements.forEach((element) => {
         if (element.tagName === 'H3') {
           currentH3 = element.textContent.trim();
           combinedData.push([currentH3, '--------------------------------------------------------------------------------------------------']);
         } else if (element.tagName === 'TABLE') {
-          element.querySelectorAll('tr').forEach((row, rowIndex) => {
+          element.querySelectorAll('tr').forEach((row) => {
             const rowData = [];
-
-            row.querySelectorAll('td, th').forEach((cell, cellIndex) => {
-              rowData.push(cell.textContent.trim());
+            row.querySelectorAll('td, th').forEach((cell) => {
+              rowData.push(formatCellValue(cell.textContent.trim()));
             });
-
             combinedData.push(rowData);
           });
-
-          combinedData.push(['--------------------------------------------------------------------------------------------------']); // One row with dashes
+          //combinedData.push(['--------------------------------------------------------------------------------------------------']);
         }
       });
+
       console.log(combinedData);
 
-      const csvLines = combinedData.map(rowData => {
+      const csvLines = convertToCSV(combinedData);
+      const csvContent = "\uFEFF" + csvLines.join('\r\n');
+      const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const csvUrl = URL.createObjectURL(csvBlob);
+
+      createDownloadLink(csvUrl, `SPECS - ${title}.csv`);
+    }
+
+    // Function to convert combined data to CSV format
+    function convertToCSV(combinedData) {
+      return combinedData.map(rowData => {
         const escapedRowArray = rowData.map(value => {
           return '"' + value.replace(/"/g, '""') + '"';
         });
         return escapedRowArray.join(';');
       });
+    }
 
-      const csvContent = "\uFEFF" + csvLines.join('\r\n');
-
-      const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const csvUrl = URL.createObjectURL(csvBlob);
-
+    // Function to create and trigger download links
+    function createDownloadLink(csvUrl, fileName) {
       const downloadLink = document.createElement('a');
       downloadLink.href = csvUrl;
-
-      downloadLink.download = `SPECS - ${title}.csv`;
+      downloadLink.download = fileName;
+      downloadLink.style.display = 'none';
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
     }
 
+    // Function to format cell values as text if necessary
+    function formatCellValue(value) {
+      if (!isNaN(value.replace(',', '')) && value.includes(',')) {
+        return `="${value}"`;
+      }
+      return value;
+    }
+
     // Call the function
     ejecutar();
-
   }
-
-})()
+})();
