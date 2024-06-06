@@ -2,21 +2,28 @@
   const htmlLang = document.querySelector("html");
   const country = htmlLang.getAttribute('lang');
 
+  function removeEmptyRows(combinedData) {
+    return combinedData.filter(row => {
+      // Check if all cells in the row are empty
+      return row.some(cell => cell !== '--------------------------------------------------------------------------------------------------' && cell.trim() !== '');
+    });
+  }
+
   if (country == "en-CA") {
 
     function ejecutar() {
       let specsContainer = document.querySelector('.fgx-brand-accordion-item:nth-child(2)');
       let title = document.title;
       const articles = specsContainer.querySelectorAll('article');
-      const combinedDataImperial = [];
-      const combinedDataMetric = [];
+      let combinedDataImperial = [];
+      let combinedDataMetric = [];
 
       articles.forEach((article) => {
         const articleH3 = article.querySelector('h3');
 
         if (articleH3) {
           combinedDataImperial.push([articleH3.textContent.trim(), '--------------------------------------------------------------------------------------------------']);
-          combinedDataMetric.push([articleH3.textContent.trim(), '--------------------------------------------------------------------------------------------------'])
+          combinedDataMetric.push([articleH3.textContent.trim(), '--------------------------------------------------------------------------------------------------']);
         }
 
         const articleTable = article.querySelectorAll('table');
@@ -46,6 +53,10 @@
           }
         });
       });
+
+      // Filter out empty rows
+      combinedDataImperial = removeEmptyRows(combinedDataImperial);
+      combinedDataMetric = removeEmptyRows(combinedDataMetric);
 
       console.log('imperial', combinedDataImperial);
       console.log('metric', combinedDataMetric);
@@ -103,7 +114,7 @@
       let specsContainer = document.querySelector('.fgx-brand-accordion-item:nth-child(2)');
       let title = document.title;
       const elements = specsContainer.querySelectorAll('h3, table');
-      const combinedData = [];
+      let combinedData = [];
       let currentH3 = null;
 
       elements.forEach((element) => {
@@ -118,9 +129,12 @@
             });
             combinedData.push(rowData);
           });
-          //combinedData.push(['--------------------------------------------------------------------------------------------------']);
+          // combinedData.push(['--------------------------------------------------------------------------------------------------']);
         }
       });
+
+      // Filter out empty rows
+      combinedData = removeEmptyRows(combinedData);
 
       console.log(combinedData);
 
