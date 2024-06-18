@@ -22,8 +22,8 @@
         const articleH3 = article.querySelector('h3');
 
         if (articleH3) {
-          combinedDataImperial.push([articleH3.textContent.trim(), '--------------------------------------------------------------------------------------------------']);
-          combinedDataMetric.push([articleH3.textContent.trim(), '--------------------------------------------------------------------------------------------------']);
+          combinedDataImperial.push([articleH3.textContent.trim()]);
+          combinedDataMetric.push([articleH3.textContent.trim()]);
         }
 
         const articleTable = article.querySelectorAll('table');
