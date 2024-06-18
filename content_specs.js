@@ -120,7 +120,7 @@
       elements.forEach((element) => {
         if (element.tagName === 'H3') {
           currentH3 = element.textContent.trim();
-          combinedData.push([currentH3, '--------------------------------------------------------------------------------------------------']);
+          combinedData.push([currentH3]);
         } else if (element.tagName === 'TABLE') {
           element.querySelectorAll('tr').forEach((row) => {
             const rowData = [];
@@ -133,10 +133,11 @@
         }
       });
 
+      console.log('Data PRE  out empty rows', combinedData);
       // Filter out empty rows
       combinedData = removeEmptyRows(combinedData);
 
-      console.log(combinedData);
+      console.log('Data POST out empty rows', combinedData);
 
       const csvLines = convertToCSV(combinedData);
       const csvContent = "\uFEFF" + csvLines.join('\r\n');
